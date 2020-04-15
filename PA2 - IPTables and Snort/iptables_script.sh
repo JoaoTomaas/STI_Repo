@@ -13,8 +13,8 @@ iptables -A INPUT -s 193.137.16.75 -p udp --sport domain -j ACCEPT
 iptables -A INPUT -s 23.214.219.129 -p tcp --dport ssh -j ACCEPT
 iptables -A INPUT -s 192.168.10.0/24 -p tcp --dport ssh -j ACCEPT
 
-iptables -A OUTPUT -d 23.214.219.129 -p tcp -sport ssh -j ACCEPT
-iptables -A OUTPUT -d 192.168.10.0/24 -p tcp -sport ssh -j ACCEPT
+iptables -A OUTPUT -d 23.214.219.129 -p tcp --sport ssh -j ACCEPT
+iptables -A OUTPUT -d 192.168.10.0/24 -p tcp --sport ssh -j ACCEPT
 
 
 ### Firewall configuration to authorize direct communications (without NAT)
