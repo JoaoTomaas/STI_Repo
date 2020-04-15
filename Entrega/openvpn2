@@ -1,5 +1,0 @@
-auth required /usr/local/lib/security/pam_google_authenticator.so forward_pass
-account required    pam_nologin.so
-account     include     system-auth  use_first_pass
-password    include     system-auth
-session     include     system-auth
