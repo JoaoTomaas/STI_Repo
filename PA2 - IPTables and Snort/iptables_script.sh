@@ -41,17 +41,13 @@ iptables -A FORWARD -d 23.214.219.131 -p tcp --sport smtp -s 192.168.10.0/24 -j 
 
 #5. POP and IMAP connections to the mail server
 #(Ainda tenho que perceber se é suposto fazer entre a internet e o mail server ou se isso faz sentido)
-#POP2
-iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport pop2 -d 23.214.219.133 -j ACCEPT
-iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport pop2 -s 23.214.219.133 -j ACCEPT
-iptables -A FORWARD -s 192.168.10.0/24 -p udp --dport pop2 -d 23.214.219.133 -j ACCEPT
-iptables -A FORWARD -d 192.168.10.0/24 -p udp --sport pop2 -s 23.214.219.133 -j ACCEPT
-#POP3
+#POP
+iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport pop -d 23.214.219.133 -j ACCEPT
+iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport pop -s 23.214.219.133 -j ACCEPT
+#POP3 (confirmar se é preciso POP3 ou se basta POP)
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport pop3 -d 23.214.219.133 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport pop3 -s 23.214.219.133 -j ACCEPT
-iptables -A FORWARD -s 192.168.10.0/24 -p udp --dport pop3 -d 23.214.219.133 -j ACCEPT
-iptables -A FORWARD -d 192.168.10.0/24 -p udp --sport pop3 -s 23.214.219.133 -j ACCEPT
-#IMAP (imap3 porto 220)
+#IMAP
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport imap -d 23.214.219.133 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport imap -s 23.214.219.133 -j ACCEPT
 iptables -A FORWARD -s 192.168.10.0/24 -p udp --dport imap -d 23.214.219.133 -j ACCEPT
