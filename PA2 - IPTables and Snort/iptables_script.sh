@@ -41,6 +41,7 @@ iptables -A FORWARD -d 23.214.219.131 -p tcp --sport smtp -s 192.168.10.0/24 -j 
 
 #5. POP and IMAP connections to the mail server
 #(Ainda tenho que perceber se é suposto fazer entre a internet e o mail server ou se isso faz sentido)
+#(Acho que basta fazer entre a rede interna e a DMZ, visto que esse é o propósito da DMZ)
 #POP (O nome do service pop é pop2)
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport pop2 -d 23.214.219.133 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport pop2 -s 23.214.219.133 -j ACCEPT
@@ -60,20 +61,20 @@ iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport https -d 23.214.219.130 -j
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport https -s 23.214.219.130 -j ACCEPT
 
 #7. OpenVPN connections to the vpn-gw server. 
-#(Penso que tanto poderá ser tcp como udp)
-iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport 1194 -d 23.214.219.129 -j ACCEPT
-iptables -A FORWARD -s 192.168.10.0/24 -p udp --dport 1194 -d 23.214.219.129 -j ACCEPT
-iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport 1194 -s 23.214.219.129 -j ACCEPT
-iptables -A FORWARD -d 192.168.10.0/24 -p udp --sport 1194 -s 23.214.219.129 -j ACCEPT
+#openvpn -> 1194
+iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport openvpn -d 23.214.219.129 -j ACCEPT
+iptables -A FORWARD -s 192.168.10.0/24 -p udp --dport openvpn -d 23.214.219.129 -j ACCEPT
+iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport openvpn -s 23.214.219.129 -j ACCEPT
+iptables -A FORWARD -d 192.168.10.0/24 -p udp --sport openvpn -s 23.214.219.129 -j ACCEPT
 #(Não sei se é necessário configurar alguma interface, tipo tun0)
 
 #8. VPN clients connected to the gateway (vpn-gw) should able to connect to the PosgreSQL service on the datastore server.
-#O porto default do PostgreSQL é o 5432 tcp udp
+#postgres -> 5432 (tcp e udp)
 #Acho que nao preciso de pôr porto no endereço do vpn-gw, acho que basta o de destino que é o do postgres
-iptables -A FORWARD -s 23.214.219.129 -p tcp --dport 5432 -d 192.168.10.1 -j ACCEPT
-iptables -A FORWARD -s 23.214.219.129 -p udp --dport 5432 -d 192.168.10.1 -j ACCEPT
-iptables -A FORWARD -d 23.214.219.129 -p tcp --sport 5432 -s 192.168.10.1 -j ACCEPT
-iptables -A FORWARD -d 23.214.219.129 -p udp --sport 5432 -s 192.168.10.1 -j ACCEPT
+iptables -A FORWARD -s 23.214.219.129 -p tcp --dport postgres -d 192.168.10.1 -j ACCEPT
+iptables -A FORWARD -s 23.214.219.129 -p udp --dport postgres -d 192.168.10.1 -j ACCEPT
+iptables -A FORWARD -d 23.214.219.129 -p tcp --sport postgres -s 192.168.10.1 -j ACCEPT
+iptables -A FORWARD -d 23.214.219.129 -p udp --sport postgres -s 192.168.10.1 -j ACCEPT
 
 ### Firewall configuration for connections to the external IP address of the firewall (using NAT) DNAT
 #Dnat->mudar o destino da ligação.
