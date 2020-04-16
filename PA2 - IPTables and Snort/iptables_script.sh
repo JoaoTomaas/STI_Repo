@@ -48,8 +48,8 @@ iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport pop2 -s 23.214.219.133 -j 
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport pop3 -d 23.214.219.133 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport pop3 -s 23.214.219.133 -j ACCEPT
 #IMAP (imap3 porto 220)
-iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport imap3 -d 23.214.219.133 -j ACCEPT
-iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport imap3 -s 23.214.219.133 -j ACCEPT
+iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport imap -d 23.214.219.133 -j ACCEPT
+iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport imap -s 23.214.219.133 -j ACCEPT
 
 #6. HTTP and HTTPS connections to the www server
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport http -d 23.214.219.130 -j ACCEPT
