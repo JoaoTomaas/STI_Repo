@@ -63,8 +63,8 @@ iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport https -s 23.214.219.130 -j
 #7. OpenVPN connections to the vpn-gw server. 
 #openvpn -> 1194
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport openvpn -d 23.214.219.129 -j ACCEPT
-iptables -A FORWARD -s 192.168.10.0/24 -p udp --dport openvpn -d 23.214.219.129 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport openvpn -s 23.214.219.129 -j ACCEPT
+iptables -A FORWARD -s 192.168.10.0/24 -p udp --dport openvpn -d 23.214.219.129 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p udp --sport openvpn -s 23.214.219.129 -j ACCEPT
 #(Não sei se é necessário configurar alguma interface, tipo tun0)
 
@@ -72,8 +72,8 @@ iptables -A FORWARD -d 192.168.10.0/24 -p udp --sport openvpn -s 23.214.219.129 
 #postgres -> 5432 (tcp e udp)
 #Acho que nao preciso de pôr porto no endereço do vpn-gw, acho que basta o de destino que é o do postgres
 iptables -A FORWARD -s 23.214.219.129 -p tcp --dport postgres -d 192.168.10.1 -j ACCEPT
-iptables -A FORWARD -s 23.214.219.129 -p udp --dport postgres -d 192.168.10.1 -j ACCEPT
 iptables -A FORWARD -d 23.214.219.129 -p tcp --sport postgres -s 192.168.10.1 -j ACCEPT
+iptables -A FORWARD -s 23.214.219.129 -p udp --dport postgres -d 192.168.10.1 -j ACCEPT
 iptables -A FORWARD -d 23.214.219.129 -p udp --sport postgres -s 192.168.10.1 -j ACCEPT
 
 ### Firewall configuration for connections to the external IP address of the firewall (using NAT) DNAT
