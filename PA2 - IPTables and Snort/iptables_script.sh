@@ -68,11 +68,12 @@ iptables -A FORWARD -d 192.168.10.0/24 -p udp --sport 1194 -s 23.214.219.129 -j 
 #(Não sei se é necessário configurar alguma interface, tipo tun0)
 
 #8. VPN clients connected to the gateway (vpn-gw) should able to connect to the PosgreSQL service on the datastore server.
-#O Porto do PostgreSQL deve ser o 5432 tcp udp, vou ver
-iptables -A FORWARD -s 23.214.219.129 -p tcp --dport 1194 -d 192.168.10.1 -j ACCEPT
-iptables -A FORWARD -s 23.214.219.129 -p udp --dport 1194 -d 192.168.10.1 -j ACCEPT
-iptables -A FORWARD -d 23.214.219.129 -p tcp --sport 1194 -s 192.168.10.1 -j ACCEPT
-iptables -A FORWARD -d 23.214.219.129 -p udp --sport 1194 -s 192.168.10.1 -j ACCEPT
+#O porto default do PostgreSQL é o 5432 tcp udp
+#Acho que nao preciso de pôr porto no endereço do vpn-gw, acho que basta o de destino que é o do postgres
+iptables -A FORWARD -s 23.214.219.129 -p tcp --dport 5432 -d 192.168.10.1 -j ACCEPT
+iptables -A FORWARD -s 23.214.219.129 -p udp --dport 5432 -d 192.168.10.1 -j ACCEPT
+iptables -A FORWARD -d 23.214.219.129 -p tcp --sport 5432 -s 192.168.10.1 -j ACCEPT
+iptables -A FORWARD -d 23.214.219.129 -p udp --sport 5432 -s 192.168.10.1 -j ACCEPT
 
 ### Firewall configuration for connections to the external IP address of the firewall (using NAT) DNAT
 #Dnat->mudar o destino da ligação.
