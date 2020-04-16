@@ -40,11 +40,16 @@ iptables -A FORWARD -s 23.214.219.131 -p tcp --dport  smtp -d 192.168.10.0/24 -j
 iptables -A FORWARD -d 23.214.219.131 -p tcp --sport smtp -s 192.168.10.0/24 -j ACCEPT
 
 #5. POP and IMAP connections to the mail server (assumo que seja POP3)
-(#Ainda tenho que perceber se é suposto fazer entre a internet e o mail server ou se isso faz sentido)
-iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport POP3 -d 23.214.219.133 -j ACCEPT
-iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport POP3 -s 23.214.219.133 -j ACCEPT
-iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport IMAP -d 23.214.219.133 -j ACCEPT
-iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport IMAP -s 23.214.219.133 -j ACCEPT
+#(Ainda tenho que perceber se é suposto fazer entre a internet e o mail server ou se isso faz sentido)
+#POP2
+iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport pop2 -d 23.214.219.133 -j ACCEPT
+iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport pop2 -s 23.214.219.133 -j ACCEPT
+#POP3
+iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport pop3 -d 23.214.219.133 -j ACCEPT
+iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport pop3 -s 23.214.219.133 -j ACCEPT
+#IMAP (imap3 porto 220)
+iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport imap3 -d 23.214.219.133 -j ACCEPT
+iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport imap3 -s 23.214.219.133 -j ACCEPT
 
 #6. HTTP and HTTPS connections to the www server
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport http -d 23.214.219.130 -j ACCEPT
