@@ -132,6 +132,7 @@ iptables -t nat -A POSTROUTING -s 192.168.10.0/24 -p tcp --dport https -j SNAT -
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport ssh -o enp0s10 -j ACCEPT
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport http -o enp0s10 -j ACCEPT
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport https -o enp0s10 -j ACCEPT
+iptables -A FORWARD -d 192.168.10.0/24 -p tcp ! --syn -j ACCEPT
 
 #3. FTP connections (in passive and active modes) to external FTP servers
 iptables -t nat -A POSTROUTING -s 192.168.10.0/24 -p tcp --dport 21 -j SNAT --to-source 87.248.214.97
