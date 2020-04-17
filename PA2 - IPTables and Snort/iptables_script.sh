@@ -36,7 +36,7 @@ iptables -A FORWARD -d 23.214.219.132 --dport 53  -p tcp -m state --state NEW,ES
 iptables -A FORWARD -s 23.214.219.132 --sport 53 -p tcp -m state --state ESTABLISHED --dport 1024:65535 -d 193.137.16.75 -j ACCEPT
 
 #4. SMTP connections to the smtp server.
-iptables -A FORWARD -s 23.214.219.131 -p tcp --dport  smtp -d 192.168.10.0/24 -j ACCEPT
+iptables -A FORWARD -s 23.214.219.131 -p tcp --dport smtp -d 192.168.10.0/24 -j ACCEPT
 iptables -A FORWARD -d 23.214.219.131 -p tcp --sport smtp -s 192.168.10.0/24 -j ACCEPT
 
 #5. POP and IMAP connections to the mail server
