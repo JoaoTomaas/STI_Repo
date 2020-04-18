@@ -120,7 +120,7 @@ iptables -A FORWARD -s 192.168.10.2 -p tcp --sport ssh -j ACCEPT
 ### Firewall configuration for communications from the internal network to the outside (using NAT) SNAT
 #1. Domain name resolutions using DNS
 iptables -t nat -A POSTROUTING -s 192.168.10.0/24 -p udp --dport domain -j SNAT --to-source 87.248.214.97
-#(Ainda tenho que rever este FORWARD)
+#Nem no MIT fazem forwards tão bons
 iptables -A FORWARD -s 192.168.10.0/24 -p udp --dport domain -o enp0s10 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p udp --sport domain -i enp0s10 -j ACCEPT
 
