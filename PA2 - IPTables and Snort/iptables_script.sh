@@ -128,11 +128,13 @@ iptables -A FORWARD -d 192.168.10.0/24 -p udp --sport domain -i enp0s10 -j ACCEP
 iptables -t nat -A POSTROUTING -s 192.168.10.0/24 -p tcp --dport ssh -j SNAT --to-source 87.248.214.97
 iptables -t nat -A POSTROUTING -s 192.168.10.0/24 -p tcp --dport http -j SNAT --to-source 87.248.214.97
 iptables -t nat -A POSTROUTING -s 192.168.10.0/24 -p tcp --dport https -j SNAT --to-source 87.248.214.97
-#(Tenho que rever estes FORWARDS)
+#FORWARDS DE SAÍDA
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport ssh -o enp0s10 -j ACCEPT
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport http -o enp0s10 -j ACCEPT
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport https -o enp0s10 -j ACCEPT
-#iptables -A FORWARD -d 192.168.10.0/24 -p tcp ! --syn -j ACCEPT
+#FORWARDS DE ENTRADA
+iptables -A FORWARD -d 192.168.10.0/24 -p tcp ! --syn -j ACCEPT
+#ou
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport ssh -i enp0s10 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport http -i enp0s10 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport htttps -i enp0s10 -j ACCEPT
