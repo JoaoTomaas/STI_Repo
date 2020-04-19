@@ -149,13 +149,11 @@ iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport 21 -i enp0s10 -m state --s
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport 20 -i enp0s10 -m state --state ESTABLISHED,RELATED -j ACCEPT
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport 20 -o enp0s10 -m state --state ESTABLISHED -j ACCEPT 
 
-
 #PASSIVE do Data Channel
 
 
-#Active
-#iptables -t nat -A PREROUTING -d 87.248.214.97 -m state ESTABLISHED, RELATED -p tcp --sport 20 -j DNAT --to-destination 192.168.10.0/24
-#(Forward em falta)
+
+
 #Passive (não sei o porto)
 #iptables -t nat -A PREROUTING -d 87.248.214.97 -m state ESTABLISHED, RELATED -p tcp -j DNAT --to destination 192.168.10.0/24
 #(Forward em falta)
