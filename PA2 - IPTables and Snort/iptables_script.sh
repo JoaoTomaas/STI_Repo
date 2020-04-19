@@ -145,7 +145,7 @@ iptables -t nat -A POSTROUTING -s 192.168.10.0/24 -p tcp --dport 21 -j SNAT --to
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport 21 -o enp0s10 -m state --state NEW -j ACCEPT #(será que nesta regra preciso da output interface -o enp0s3??)
 
 #ACTIVE do Data Channel
-iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport 20 -m state -i enp0s10 --state RELATED, ESTABLISHED -j ACCEPT 
+iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport 20 -i enp0s10 -m state --state RELATED, ESTABLISHED -j ACCEPT 
 
 #PASSIVE do Data Channel
 
