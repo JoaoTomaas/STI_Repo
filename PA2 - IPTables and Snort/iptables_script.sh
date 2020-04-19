@@ -154,5 +154,4 @@ iptables -t nat -A PREROUTING -d 87.248.214.97 -m state ESTABLISHED, RELATED -p 
 #Configuração dos módulos para o connection tracking do FTP
 #modprobe ip_conntrack_ftp
 #modprobe ip_nat_ftp
-#Adicionar esta linha no ficheiro iptables-config file:
-#IPTABLES_MODULES="ip_nat_ftp ip_conntrack_ftp"
+#Adicionar esta linha no ficheiro /etc/sysconfig/iptables-config: IPTABLES_MODULES="ip_nat_ftp ip_conntrack_ftp"
