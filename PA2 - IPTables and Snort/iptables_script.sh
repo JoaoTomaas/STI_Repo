@@ -141,14 +141,20 @@ iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport htttps -i enp0s10 -j ACCEP
 
 #3. FTP connections (in passive and active modes) to external FTP servers
 iptables -t nat -A POSTROUTING -s 192.168.10.0/24 -p tcp --dport 21 -j SNAT --to-source 87.248.214.97
-iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport 21 -m state --state NEW -j ACCEPT #(será que nesta regra preciso da output interface -o enp0s3??)
+#FORWARD do Command Channel
+iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport 21 -m state --state NEW -o enp0s10 -j ACCEPT #(será que nesta regra preciso da output interface -o enp0s3??)
+
+#ACTIVE do Data Channel
+iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport 20 -m state --state RELATED, ESTABLISHED -i enp0s10 -j ACCEPT 
+
+#PASSIVE do Data Channel
+
 
 #Active
-iptables -t nat -A PREROUTING -d 87.248.214.97 -m state ESTABLISHED, RELATED -p tcp --sport 20 -j DNAT --to-destination 192.168.10.0/24
+#iptables -t nat -A PREROUTING -d 87.248.214.97 -m state ESTABLISHED, RELATED -p tcp --sport 20 -j DNAT --to-destination 192.168.10.0/24
 #(Forward em falta)
-
 #Passive (não sei o porto)
-iptables -t nat -A PREROUTING -d 87.248.214.97 -m state ESTABLISHED, RELATED -p tcp -j DNAT --to destination 192.168.10.0/24
+#iptables -t nat -A PREROUTING -d 87.248.214.97 -m state ESTABLISHED, RELATED -p tcp -j DNAT --to destination 192.168.10.0/24
 #(Forward em falta)
 
 #Configuração dos módulos para o connection tracking do FTP
