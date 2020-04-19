@@ -150,8 +150,8 @@ iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport 20 -i enp0s10 -m state --s
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport 20 -o enp0s10 -m state --state ESTABLISHED -j ACCEPT 
 
 #PASSIVE do Data Channel
-iptables -A FORWARD -d 192.168.10.0/24 -p tcp -i enp0s10 -m state --state ESTABLISHED,RELATED -j ACCEPT
-iptables -A FORWARD -s 192.168.10.0/24 -p tcp -o enp0s10 -m state --state ESTABLISHED -j ACCEPT 
+iptables -A FORWARD -s 192.168.10.0/24 -p tcp -o enp0s10 -m state --state ESTABLISHED,RELATED -j ACCEPT 
+iptables -A FORWARD -d 192.168.10.0/24 -p tcp -i enp0s10 -m state --state ESTABLISHED -j ACCEPT
 
 
 #Passive (não sei o porto)
