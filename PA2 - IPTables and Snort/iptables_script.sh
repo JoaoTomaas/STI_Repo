@@ -142,10 +142,10 @@ iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport htttps -i enp0s10 -j ACCEP
 #3. FTP connections (in passive and active modes) to external FTP servers
 iptables -t nat -A POSTROUTING -s 192.168.10.0/24 -p tcp --dport 21 -j SNAT --to-source 87.248.214.97
 #FORWARD do Command Channel
-iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport 21 -m state --state NEW -o enp0s10 -j ACCEPT #(será que nesta regra preciso da output interface -o enp0s3??)
+iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport 21 -o enp0s10 -m state --state NEW -j ACCEPT #(será que nesta regra preciso da output interface -o enp0s3??)
 
 #ACTIVE do Data Channel
-iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport 20 -m state --state RELATED, ESTABLISHED -i enp0s10 -j ACCEPT 
+iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport 20 -m state -i enp0s10 --state RELATED, ESTABLISHED -j ACCEPT 
 
 #PASSIVE do Data Channel
 
