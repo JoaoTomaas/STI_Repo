@@ -1,7 +1,7 @@
 #!/bin/bash
 #Checklist
 #Secção 1 - Done
-#Secção 2 - A efetuar correções
+#Secção 2 - Done (Verificar se as regras estão todas bem feitas)
 #Secção 3 - Falta verificar se tem todos os IP's que são precisos e se as interfaces de entrada e saída estão corretas
 
 ### Firewall configuration to protect the router
