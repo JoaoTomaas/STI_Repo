@@ -84,7 +84,10 @@ iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport openvpn -s 23.214.219.129 
 iptables -A FORWARD -s 192.168.10.0/24 -p udp --dport openvpn -d 23.214.219.129 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p udp --sport openvpn -s 23.214.219.129 -j ACCEPT
 #Comunicação com a Internet
-
+iptables -A FORWARD -d 23.214.219.129 -p tcp --dport openvpn -i enp0s10 -j ACCEPT
+iptables -A FORWARD -s 23.214.219.129 -p tcp --sport openvpn -o enp0s10 -j ACCEPT
+iptables -A FORWARD -d 23.214.219.129 -p udp --dport openvpn -i enp0s10 -j ACCEPT
+iptables -A FORWARD -s 23.214.219.129 -p udp --sport openvpn -o enp0s10 -j ACCEPT
 
 #8. VPN clients connected to the gateway (vpn-gw) should able to connect to the PosgreSQL service on the datastore server.
 #postgres -> 5432 (tcp e udp)
