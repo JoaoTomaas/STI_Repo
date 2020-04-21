@@ -4,6 +4,9 @@
 #Secção 2 - Done (Verificar se as regras estão todas bem feitas)
 #Secção 3 - Falta verificar se tem todos os IP's que são precisos e se as interfaces de entrada e saída estão corretas
 
+#NOTA IMPORTANTE: Nas secções 2 e 3 temos que verificar se estamos a pôr corretamente os endereços do eden e da dns2 e 
+# se vamos pôr as regras com ambos os endereços ou com apenas um deles
+
 ### Firewall configuration to protect the router
 #1. DNS name resolution requests sent to outside servers (/etc/services -------> DNS é chamado domain e tem porto 53)
 iptables -A OUTPUT -p udp --dport domain -j ACCEPT 
@@ -28,17 +31,16 @@ iptables -A FORWARD -s 192.168.10.0/24 -p udp --dport domain -d 23.214.219.132 -
 iptables -A FORWARD -d 192.168.10.0/24 -p udp --sport domain -s 23.214.219.132 -j ACCEPT
 
 #2. The dns server should be able to resolve names using DNS servers on the Internet (dns2 and also others). (os da diretoria /etc/resolv.conf ??)
-iptables -A FORWARD -s 23.214.219.132 -p udp --dport domain -d 193.137.16.75 -j ACCEPT
-iptables -A FORWARD -d 23.214.219.132 -p udp --sport domain -s 193.137.16.75 -j ACCEPT
+iptables -A FORWARD -s 23.214.219.132 -p udp --dport domain -o enp0s10 -j ACCEPT
+iptables -A FORWARD -d 23.214.219.132 -p udp --sport domain -i enp0s10  -j ACCEPT
 
 #3. The dns and dns2 servers should be able to synchronize the contents of DNS zones(https://ns1.com/resources/dns-zones-explained).
 #//DNS server da DMZ inicia a ligação (ver se faz sentido)
-iptables -A FORWARD -d 193.137.16.75 --dport 53  -p tcp -m state --state NEW,ESTABLISHED --sport 1024:65535 -s 23.214.219.132  -j ACCEPT
-iptables -A FORWARD -s 193.137.16.75 --sport 53 -p tcp -m state --state ESTABLISHED --dport 1024:65535 -d 23.214.219.132 -j ACCEPT
-
+iptables -A FORWARD -s 23.214.219.132 -p udp  --dport domain -o enp0s10 -d 87.248.214.215  -j ACCEPT
+iptables -A FORWARD -d 23.214.219.132 -p udp  --sport domain -i enp0s10 -s 87.248.214.215  -j ACCEPT
 #//DNS2 inicia a ligação
-iptables -A FORWARD -d 23.214.219.132 --dport 53  -p tcp -m state --state NEW,ESTABLISHED --sport 1024:65535 -s 193.137.16.75 -j ACCEPT
-iptables -A FORWARD -s 23.214.219.132 --sport 53 -p tcp -m state --state ESTABLISHED --dport 1024:65535 -d 193.137.16.75 -j ACCEPT
+iptables -A FORWARD -d 23.214.219.132 -p udp  --dport domain -i enp0s10 -s 87.248.214.215  -j ACCEPT
+iptables -A FORWARD -s 23.214.219.132 -p udp  --sport domain -0 enp0s10 -d 87.248.214.215  -j ACCEPT
 
 #4. SMTP connections to the smtp server.
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport smtp -d  23.214.219.131 -j ACCEPT
