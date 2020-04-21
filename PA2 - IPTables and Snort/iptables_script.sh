@@ -1,4 +1,8 @@
 #!/bin/bash
+#Checklist
+#Secção 1 - Done
+#Secção 2 - A efetuar correções
+#Secção 3 - Falta verificar se tem todos os IP's que são precisos e se as interfaces de entrada e saída estão corretas
 
 ### Firewall configuration to protect the router
 #1. DNS name resolution requests sent to outside servers (/etc/services -------> DNS é chamado domain e tem porto 53)
@@ -14,7 +18,6 @@ iptables -A INPUT -p udp --sport domain -j ACCEPT
 #2. SSH connections to the router system, if originated at the internal network or at the VPN gateway (vpn-gw)
 iptables -A INPUT -s 23.214.219.129 -p tcp --dport ssh -j ACCEPT
 iptables -A INPUT -s 192.168.10.0/24 -p tcp --dport ssh -j ACCEPT
-
 iptables -A OUTPUT -d 23.214.219.129 -p tcp --sport ssh -j ACCEPT
 iptables -A OUTPUT -d 192.168.10.0/24 -p tcp --sport ssh -j ACCEPT
 
@@ -77,6 +80,7 @@ iptables -A FORWARD -s 23.214.219.129 -p tcp --dport postgres -d 192.168.10.1 -j
 iptables -A FORWARD -d 23.214.219.129 -p tcp --sport postgres -s 192.168.10.1 -j ACCEPT
 iptables -A FORWARD -s 23.214.219.129 -p udp --dport postgres -d 192.168.10.1 -j ACCEPT
 iptables -A FORWARD -d 23.214.219.129 -p udp --sport postgres -s 192.168.10.1 -j ACCEPT
+
 
 ### Firewall configuration for connections to the external IP address of the firewall (using NAT) DNAT
 #Dnat->mudar o destino da ligação.
