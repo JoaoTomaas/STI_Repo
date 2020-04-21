@@ -43,6 +43,13 @@ iptables -A FORWARD -s 23.214.219.132 --sport 53 -p tcp -m state --state ESTABLI
 #4. SMTP connections to the smtp server.
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport smtp -d  23.214.219.131 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport smtp -s  23.214.219.131 -j ACCEPT
+iptables -A FORWARD -s 192.168.10.0/24 -p udp --dport smtp -d  23.214.219.131 -j ACCEPT
+iptables -A FORWARD -d 192.168.10.0/24 -p udp --sport smtp -s  23.214.219.131 -j ACCEPT
+#Comunicação com a Internet
+iptables -A FORWARD -d 23.214.219.131 -p tcp --dport smtp -i enp0s10 -j ACCEPT
+iptables -A FORWARD -s 23.214.219.131 -p tcp --sport smtp -o enp0s10 -j ACCEPT
+iptables -A FORWARD -d 23.214.219.131 -p udp --dport smtp -i enp0s10 -j ACCEPT
+iptables -A FORWARD -s 23.214.219.131 -p udp --sport smtp -o enp0s10 -j ACCEPT
 
 #5. POP and IMAP connections to the mail server
 #(Ainda tenho que perceber se é suposto fazer entre a internet e o mail server ou se isso faz sentido)
