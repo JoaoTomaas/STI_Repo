@@ -58,12 +58,24 @@ iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport imap -d 23.214.219.133 -j 
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport imap -s 23.214.219.133 -j ACCEPT
 iptables -A FORWARD -s 192.168.10.0/24 -p udp --dport imap -d 23.214.219.133 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p udp --sport imap -s 23.214.219.133 -j ACCEPT
+#Comunicação com a Internet
+iptables -A FORWARD -d 23.214.219.133 -p tcp --dport pop2 -i enp0s10 -j ACCEPT
+iptables -A FORWARD -s 23.214.219.133 -p tcp --sport pop2 -o enp0s10 -j ACCEPT
+iptables -A FORWARD -d 23.214.219.133 -p tcp --dport pop3 -i enp0s10 -j ACCEPT
+iptables -A FORWARD -s 23.214.219.133 -p tcp --sport pop3 -o enp0s10 -j ACCEPT
+iptables -A FORWARD -d 23.214.219.133 -p tcp --dport imap -i enp0s10 -j ACCEPT
+iptables -A FORWARD -s 23.214.219.133 -p tcp --sport imap -o enp0s10 -j ACCEPT
 
 #6. HTTP and HTTPS connections to the www server
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport http -d 23.214.219.130 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport http -s 23.214.219.130 -j ACCEPT
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport https -d 23.214.219.130 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport https -s 23.214.219.130 -j ACCEPT
+#Comunicação com a Internet
+iptables -A FORWARD -d 23.214.219.130 -p tcp --dport http -i enp0s10 -j ACCEPT
+iptables -A FORWARD -s 23.214.219.130 -p tcp --sport http -o enp0s10 -j ACCEPT
+iptables -A FORWARD -d 23.214.219.130 -p tcp --dport https -i enp0s10 -j ACCEPT
+iptables -A FORWARD -s 23.214.219.130 -p tcp --sport https -o enp0s10 -j ACCEPT
 
 #7. OpenVPN connections to the vpn-gw server. 
 #openvpn -> 1194
@@ -71,7 +83,8 @@ iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport openvpn -d 23.214.219.129 
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport openvpn -s 23.214.219.129 -j ACCEPT
 iptables -A FORWARD -s 192.168.10.0/24 -p udp --dport openvpn -d 23.214.219.129 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p udp --sport openvpn -s 23.214.219.129 -j ACCEPT
-#(Não sei se é necessário configurar alguma interface, tipo tun0)
+#Comunicação com a Internet
+
 
 #8. VPN clients connected to the gateway (vpn-gw) should able to connect to the PosgreSQL service on the datastore server.
 #postgres -> 5432 (tcp e udp)
