@@ -2,12 +2,14 @@
 
 ### Firewall configuration to protect the router
 #1. DNS name resolution requests sent to outside servers (/etc/services -------> DNS é chamado domain e tem porto 53)
-iptables -A OUTPUT -d 23.214.219.132 -p udp --dport domain -j ACCEPT 
-iptables -A OUTPUT -d 193.137.16.75 -p udp --dport domain -j ACCEPT 
+iptables -A OUTPUT -p udp --dport domain -j ACCEPT 
+iptables -A INPUT -p udp --sport domain -j ACCEPT
 
-iptables -A INPUT -s 23.214.219.132 -p udp --sport domain -j ACCEPT 
-iptables -A INPUT -s 193.137.16.75 -p udp --sport domain -j ACCEPT
-
+#Como diz outside servers não precisamos de estar a especificar IP's
+#iptables -A OUTPUT -d 23.214.219.132 -p udp --dport domain -j ACCEPT 
+#iptables -A OUTPUT -d 193.137.16.75 -p udp --dport domain -j ACCEPT 
+#iptables -A INPUT -s 23.214.219.132 -p udp --sport domain -j ACCEPT 
+#iptables -A INPUT -s 193.137.16.75 -p udp --sport domain -j ACCEPT
 
 #2. SSH connections to the router system, if originated at the internal network or at the VPN gateway (vpn-gw)
 iptables -A INPUT -s 23.214.219.129 -p tcp --dport ssh -j ACCEPT
