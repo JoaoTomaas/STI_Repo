@@ -131,6 +131,25 @@ iptables -t nat -A PREROUTING -i enp0s10 -s 87.248.214.214  -d 87.248.214.97 -p 
 iptables -A FORWARD -i enp0s10 -s 87.248.214.214 -d 192.168.10.2 -p tcp --dport ssh -j ACCEPT
 iptables -A FORWARD  -s 192.168.10.2  -d 87.248.214.214 -p tcp --sport ssh -j ACCEPT
 
+#Eden(Para teste)
+iptables -t nat -A PREROUTING -i enp0s10 -s 87.248.214.1  -d 87.248.214.97 -p tcp --dport ssh -j DNAT --to-destination 192.168.10.2
+iptables -A FORWARD -i enp0s10 -s 87.248.214.1 -d 192.168.10.2 -p tcp --dport ssh -j ACCEPT
+iptables -A FORWARD  -s 192.168.10.2  -d 87.248.214.1 -p tcp --sport ssh -j ACCEPT
+
+#Dns2 (Para teste)
+iptables -t nat -A PREROUTING -i enp0s10 -s 87.248.214.75  -d 87.248.214.97 -p tcp --dport ssh -j DNAT --to-destination 192.168.10.2
+iptables -A FORWARD -i enp0s10 -s 87.248.214.75 -d 192.168.10.2 -p tcp --dport ssh -j ACCEPT
+iptables -A FORWARD  -s 192.168.10.2  -d 87.248.214.75 -p tcp --sport ssh -j ACCEPT
+
+#IP's do esquema
+#Eden
+iptables -t nat -A PREROUTING -i enp0s10 -s 193.136.212.1  -d 87.248.214.97 -p tcp --dport ssh -j DNAT --to-destination 192.168.10.2
+iptables -A FORWARD -i enp0s10 -s 193.136.212.1 -d 192.168.10.2 -p tcp --dport ssh -j ACCEPT
+iptables -A FORWARD  -s 192.168.10.2  -d 193.136.212.1 -p tcp --sport ssh -j ACCEPT
+#Dns2
+iptables -t nat -A PREROUTING -i enp0s10 -s 193.136.16.75  -d 87.248.214.97 -p tcp --dport ssh -j DNAT --to-destination 192.168.10.2
+iptables -A FORWARD -i enp0s10 -s 193.136.16.75 -d 192.168.10.2 -p tcp --dport ssh -j ACCEPT
+iptables -A FORWARD  -s 192.168.10.2  -d 193.136.16.75 -p tcp --sport ssh -j ACCEPT
 
 ### Firewall configuration for communications from the internal network to the outside (using NAT) SNAT
 #1. Domain name resolutions using DNS
