@@ -107,22 +107,19 @@ iptables -A FORWARD -d 23.214.219.129 -p udp --sport postgres -s 192.168.10.1 -j
 
 ### Firewall configuration for connections to the external IP address of the firewall (using NAT) DNAT
 #Dnat->mudar o destino da ligação.
-
 #1. FTP connections (in passive and active modes) to the ftp server.
-#(adicionar interfaces de input e output)
 iptables -t nat -A PREROUTING  -d 87.248.214.97 -i enp0s10 -m state --state NEW -p tcp --dport 21  -j DNAT --to-destination 192.168.10.1
-
 #(Command channel)
-iptables -A FORWARD -i enp0s10  -d 192.168.10.1 -p tcp --dport 21 -j ACCEPT 
-iptables -A FORWARD  -s 192.168.10.1 -p tcp --sport 21 -j ACCEPT 
+iptables -A FORWARD -i enp0s10  -d 192.168.10.1 -p tcp --dport 21 -m state --state ESTABLISHED,NEW -j ACCEPT 
+iptables -A FORWARD -o enp0s10 -s 192.168.10.1 -p tcp --sport 21 -m state --state ESTABLISHED -j ACCEPT 
 
 #(Data channel Active)
-iptables -A FORWARD  -s 192.168.10.1 -p tcp --sport 20 -j ACCEPT 
-iptables -A FORWARD  -d 192.168.10.1 -p tcp --dport 20 -j ACCEPT 
+iptables -A FORWARD  -o enp0s10 -s 192.168.10.1 -p tcp --sport 20 -m state  --state ESTABLISHED,RELATED -j ACCEPT 
+iptables -A FORWARD  -i enp0s10 -d 192.168.10.1 -p tcp --dport 20 -m state --state ESTABLISHED -j ACCEPT 
 
 #(Data channel Passive)
-iptables -A FORWARD -d 192.168.10.1 -p tcp -m state --state ESTABLISHED,RELATED,NEW -j ACCEPT 
-iptables -A FORWARD -s 192.168.10.1 -p tcp -m state --state ESTABLISHED -j ACCEPT
+iptables -A FORWARD -i enp0s10 -d 192.168.10.1 -p tcp -m state --state ESTABLISHED,RELATED -j ACCEPT 
+iptables -A FORWARD -o enp0s10 -s 192.168.10.1 -p tcp -m state --state ESTABLISHED -j ACCEPT
 
 #2. SSH connections to the datastore server, but only if originated at the eden or dns2 servers.
 #iptables -t nat -A PREROUTING -i enp0s10 -s 87.248.214.214  -d 87.248.214.97 -p tcp --dport ssh -j DNAT --to-destination 192.168.10.2
