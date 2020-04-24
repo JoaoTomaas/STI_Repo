@@ -111,21 +111,11 @@ iptables -A FORWARD -d 23.214.219.129 -p udp --sport postgres -s 192.168.10.1 -j
 #Dnat->mudar o destino da ligação.
 
 #1. FTP connections (in passive and active modes) to the ftp server.
-#FTP connections de onde ?????
-#(active mais fácil)
-
-iptables -t nat -A PREROUTING  -d 87.248.214.97 -m state --state NEW
- -p tcp --dport 21  -j DNAT --to-destination 192.168.10.1
-
-iptables -A FORWARD  -d 192.168.10.1 -p tcp --dport 21 -j ACCEPT 
-iptables -A FORWARD  -s 192.168.10.1 -p tcp --sport 20 -j ACCEPT 
-iptables -t nat -A POSTROUTING -s 192.168.10.1 -p tcp --sport 20 -j SNAT --to-source 87.248.214.97
-
-iptables -t nat -A PREROUTING  -d 87.248.214.97 -m state --state RELATED,ESTABLISHED -p tcp -j DNAT --to-destination 192.168.10.1
-iptables -A FORWARD  -d 192.168.10.1 -m state --state RELATED,ESTABLISHED -p tcp -j ACCEPT 
+#(adicionar interfaces de input e output)
+iptables -t nat -A PREROUTING  -d 87.248.214.97 -i enp0s10 -m state --state NEW -p tcp --dport 21  -j DNAT --to-destination 192.168.10.1
 
 #(Command channel)
-iptables -A FORWARD  -d 192.168.10.1 -p tcp --dport 21 -j ACCEPT 
+iptables -A FORWARD -i enp0s10  -d 192.168.10.1 -p tcp --dport 21 -j ACCEPT 
 iptables -A FORWARD  -s 192.168.10.1 -p tcp --sport 21 -j ACCEPT 
 
 #(Data channel Active)
@@ -133,20 +123,14 @@ iptables -A FORWARD  -s 192.168.10.1 -p tcp --sport 20 -j ACCEPT
 iptables -A FORWARD  -d 192.168.10.1 -p tcp --dport 20 -j ACCEPT 
 
 #(Data channel Passive)
--p tcp -m state --state RELATED,ESTABLISHED
+iptables -A FORWARD -d 192.168.10.1 -p tcp -m state --state ESTABLISHED,RELATED,NEW -j ACCEPT 
+iptables -A FORWARD -s 192.168.10.1 -p tcp -m state --state ESTABLISHED -j ACCEPT
 
 #2. SSH connections to the datastore server, but only if originated at the eden or dns2 servers.
-#(substituir o -d por -o?????)
-#(Depois do pre-routing é sempre preciso o foward como mostra o esquema)
-iiptables -t nat -A PREROUTING -s 193.137.16.75 -d 87.248.214.97 -p tcp --dport ssh -j DNAT --to-destination 192.168.10.2
-iptables -A FORWARD -s 193.137.16.75 -d 192.168.10.2 -p tcp --dport ssh -j ACCEPT 
+iptables -t nat -A PREROUTING -i enp0s10 -s 87.248.214.214  -d 87.248.214.97 -p tcp --dport ssh -j DNAT --to-destination 192.168.10.2
+iptables -A FORWARD -i enp0s10 -s 87.248.214.214 -d 192.168.10.2 -p tcp --dport ssh -j ACCEPT
+iptables -A FORWARD  -s 192.168.10.2  -d 87.248.214.214 -p tcp --sport ssh -j ACCEPT
 
-iptables -t nat -A PREROUTING -s 193.136.212.1 -d 87.248.214.97 -p tcp --dport ssh -j DNAT --to-destination 192.168.10.2
-iptables -A FORWARD -s 193.136.212.1 -d 192.168.10.2 -p tcp --dport ssh -j ACCEPT 
-
-iptables -A FORWARD -s 192.168.10.2 -p tcp --sport ssh -j ACCEPT
-#(O joão já deve ter algo do gênero)
-#(retorno da ligação)
 
 ### Firewall configuration for communications from the internal network to the outside (using NAT) SNAT
 #1. Domain name resolutions using DNS
