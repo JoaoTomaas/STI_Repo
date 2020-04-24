@@ -40,7 +40,7 @@ iptables -A FORWARD -s 23.214.219.132 -p udp  --dport domain -o enp0s10 -d 87.24
 iptables -A FORWARD -d 23.214.219.132 -p udp  --sport domain -i enp0s10 -s 87.248.214.215  -j ACCEPT
 #//DNS2 inicia a ligação (ESTA REPETIDO, FOMOS PATOS)
 iptables -A FORWARD -d 23.214.219.132 -p udp  --dport domain -i enp0s10 -s 87.248.214.215  -j ACCEPT
-iptables -A FORWARD -s 23.214.219.132 -p udp  --sport domain -0 enp0s10 -d 87.248.214.215  -j ACCEPT
+iptables -A FORWARD -s 23.214.219.132 -p udp  --sport domain -o enp0s10 -d 87.248.214.215  -j ACCEPT
 
 #4. SMTP connections to the smtp server.
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport smtp -d  23.214.219.131 -j ACCEPT
