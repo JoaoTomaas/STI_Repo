@@ -29,12 +29,18 @@ iptables -A FORWARD -s 23.214.219.132 -p udp --dport domain -o enp0s10 -j ACCEPT
 iptables -A FORWARD -d 23.214.219.132 -p udp --sport domain -i enp0s10  -j ACCEPT
 
 #3. The dns and dns2 servers should be able to synchronize the contents of DNS zones(https://ns1.com/resources/dns-zones-explained).
-#//DNS server da DMZ inicia a ligação
-iptables -A FORWARD -s 23.214.219.132 -p udp  --dport domain -o enp0s10 -d 87.248.214.215  -j ACCEPT
-iptables -A FORWARD -d 23.214.219.132 -p udp  --sport domain -i enp0s10 -s 87.248.214.215  -j ACCEPT
-#//DNS2 inicia a ligação
-iptables -A FORWARD -d 23.214.219.132 -p udp  --dport domain -i enp0s10 -s 87.248.214.215  -j ACCEPT
-iptables -A FORWARD -s 23.214.219.132 -p udp  --sport domain -o enp0s10 -d 87.248.214.215  -j ACCEPT
+#DNS server da DMZ inicia a ligação
+iptables -A FORWARD -s 23.214.219.132 -p udp  --dport domain -o enp0s10 -d 87.248.214.75  -j ACCEPT
+iptables -A FORWARD -d 23.214.219.132 -p udp  --sport domain -i enp0s10 -s 87.248.214.75  -j ACCEPT
+#DNS2 inicia a ligação
+iptables -A FORWARD -d 23.214.219.132 -p udp  --dport domain -i enp0s10 -s 87.248.214.75  -j ACCEPT
+iptables -A FORWARD -s 23.214.219.132 -p udp  --sport domain -o enp0s10 -d 87.248.214.75  -j ACCEPT
+#IPs do esquema
+iptables -A FORWARD -s 23.214.219.132 -p udp  --dport domain -o enp0s10 -d 193.136.16.75  -j ACCEPT
+iptables -A FORWARD -d 23.214.219.132 -p udp  --sport domain -i enp0s10 -s 193.136.16.75  -j ACCEPT
+#DNS2 inicia a ligação
+iptables -A FORWARD -d 23.214.219.132 -p udp  --dport domain -i enp0s10 -s 193.136.16.75  -j ACCEPT
+iptables -A FORWARD -s 23.214.219.132 -p udp  --sport domain -o enp0s10 -d 193.136.16.75  -j ACCEPT
 
 #4. SMTP connections to the smtp server.
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport smtp -d  23.214.219.131 -j ACCEPT
@@ -119,9 +125,9 @@ iptables -A FORWARD -d 192.168.10.1 -p tcp -m state --state ESTABLISHED,RELATED,
 iptables -A FORWARD -s 192.168.10.1 -p tcp -m state --state ESTABLISHED -j ACCEPT
 
 #2. SSH connections to the datastore server, but only if originated at the eden or dns2 servers.
-iptables -t nat -A PREROUTING -i enp0s10 -s 87.248.214.214  -d 87.248.214.97 -p tcp --dport ssh -j DNAT --to-destination 192.168.10.2
-iptables -A FORWARD -i enp0s10 -s 87.248.214.214 -d 192.168.10.2 -p tcp --dport ssh -j ACCEPT
-iptables -A FORWARD  -s 192.168.10.2  -d 87.248.214.214 -p tcp --sport ssh -j ACCEPT
+#iptables -t nat -A PREROUTING -i enp0s10 -s 87.248.214.214  -d 87.248.214.97 -p tcp --dport ssh -j DNAT --to-destination 192.168.10.2
+#iptables -A FORWARD -i enp0s10 -s 87.248.214.214 -d 192.168.10.2 -p tcp --dport ssh -j ACCEPT
+#iptables -A FORWARD  -s 192.168.10.2  -d 87.248.214.214 -p tcp --sport ssh -j ACCEPT
 
 #Eden(Para teste)
 iptables -t nat -A PREROUTING -i enp0s10 -s 87.248.214.1  -d 87.248.214.97 -p tcp --dport ssh -j DNAT --to-destination 192.168.10.2
