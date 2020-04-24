@@ -12,12 +12,6 @@
 iptables -A OUTPUT -p udp --dport domain -j ACCEPT 
 iptables -A INPUT -p udp --sport domain -j ACCEPT
 
-#Como diz outside servers não precisamos de estar a especificar IP's
-#iptables -A OUTPUT -d 23.214.219.132 -p udp --dport domain -j ACCEPT 
-#iptables -A OUTPUT -d 193.137.16.75 -p udp --dport domain -j ACCEPT 
-#iptables -A INPUT -s 23.214.219.132 -p udp --sport domain -j ACCEPT 
-#iptables -A INPUT -s 193.137.16.75 -p udp --sport domain -j ACCEPT
-
 #2. SSH connections to the router system, if originated at the internal network or at the VPN gateway (vpn-gw)
 iptables -A INPUT -s 23.214.219.129 -p tcp --dport ssh -j ACCEPT
 iptables -A INPUT -s 192.168.10.0/24 -p tcp --dport ssh -j ACCEPT
@@ -35,10 +29,10 @@ iptables -A FORWARD -s 23.214.219.132 -p udp --dport domain -o enp0s10 -j ACCEPT
 iptables -A FORWARD -d 23.214.219.132 -p udp --sport domain -i enp0s10  -j ACCEPT
 
 #3. The dns and dns2 servers should be able to synchronize the contents of DNS zones(https://ns1.com/resources/dns-zones-explained).
-#//DNS server da DMZ inicia a ligação (ver se faz sentido)
+#//DNS server da DMZ inicia a ligação
 iptables -A FORWARD -s 23.214.219.132 -p udp  --dport domain -o enp0s10 -d 87.248.214.215  -j ACCEPT
 iptables -A FORWARD -d 23.214.219.132 -p udp  --sport domain -i enp0s10 -s 87.248.214.215  -j ACCEPT
-#//DNS2 inicia a ligação (ESTA REPETIDO, FOMOS PATOS)
+#//DNS2 inicia a ligação
 iptables -A FORWARD -d 23.214.219.132 -p udp  --dport domain -i enp0s10 -s 87.248.214.215  -j ACCEPT
 iptables -A FORWARD -s 23.214.219.132 -p udp  --sport domain -o enp0s10 -d 87.248.214.215  -j ACCEPT
 
@@ -54,12 +48,10 @@ iptables -A FORWARD -d 23.214.219.131 -p udp --dport smtp -i enp0s10 -j ACCEPT
 iptables -A FORWARD -s 23.214.219.131 -p udp --sport smtp -o enp0s10 -j ACCEPT
 
 #5. POP and IMAP connections to the mail server
-#(Ainda tenho que perceber se é suposto fazer entre a internet e o mail server ou se isso faz sentido)
-#(Acho que basta fazer entre a rede interna e a DMZ, visto que esse é o propósito da DMZ)
 #POP (O nome do service pop é pop2)
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport pop2 -d 23.214.219.133 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport pop2 -s 23.214.219.133 -j ACCEPT
-#POP3 (confirmar se é preciso POP3 ou se basta POP)
+#POP3
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport pop3 -d 23.214.219.133 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport pop3 -s 23.214.219.133 -j ACCEPT
 #IMAP
