@@ -38,7 +38,7 @@ iptables -A FORWARD -d 23.214.219.132 -p udp --sport domain -i enp0s10  -j ACCEP
 #//DNS server da DMZ inicia a ligação (ver se faz sentido)
 iptables -A FORWARD -s 23.214.219.132 -p udp  --dport domain -o enp0s10 -d 87.248.214.215  -j ACCEPT
 iptables -A FORWARD -d 23.214.219.132 -p udp  --sport domain -i enp0s10 -s 87.248.214.215  -j ACCEPT
-#//DNS2 inicia a ligação
+#//DNS2 inicia a ligação (ESTA REPETIDO, FOMOS PATOS)
 iptables -A FORWARD -d 23.214.219.132 -p udp  --dport domain -i enp0s10 -s 87.248.214.215  -j ACCEPT
 iptables -A FORWARD -s 23.214.219.132 -p udp  --sport domain -0 enp0s10 -d 87.248.214.215  -j ACCEPT
 
