@@ -1,9 +1,10 @@
 #!/bin/bash
 #Checklist
 #Secção 1 - Done
-#Secção 2 - Done (Verificar se as regras estão todas bem feitas)
-#Secção 3 - Falta verificar se tem todos os IP's que são precisos e se as interfaces de entrada e saída estão corretas
+#Secção 2 - Done
+#Secção 3 - Done
 
+#NOTA IMPORTANTE: Testar todas as regras quando as puser todas no mesmo ficheiro de iptables
 
 ### Firewall configuration to protect the router
 #1. DNS name resolution requests sent to outside servers (/etc/services -------> DNS é chamado domain e tem porto 53)
