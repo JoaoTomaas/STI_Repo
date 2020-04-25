@@ -55,8 +55,6 @@ iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport pop3 -s 23.214.219.133 -j 
 #IMAP
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport imap -d 23.214.219.133 -j ACCEPT
 iptables -A FORWARD -d 192.168.10.0/24 -p tcp --sport imap -s 23.214.219.133 -j ACCEPT
-iptables -A FORWARD -s 192.168.10.0/24 -p udp --dport imap -d 23.214.219.133 -j ACCEPT
-iptables -A FORWARD -d 192.168.10.0/24 -p udp --sport imap -s 23.214.219.133 -j ACCEPT
 #Comunicação com a Internet
 iptables -A FORWARD -d 23.214.219.133 -p tcp --dport pop2 -i enp0s10 -j ACCEPT
 iptables -A FORWARD -s 23.214.219.133 -p tcp --sport pop2 -o enp0s10 -j ACCEPT
@@ -64,8 +62,6 @@ iptables -A FORWARD -d 23.214.219.133 -p tcp --dport pop3 -i enp0s10 -j ACCEPT
 iptables -A FORWARD -s 23.214.219.133 -p tcp --sport pop3 -o enp0s10 -j ACCEPT
 iptables -A FORWARD -d 23.214.219.133 -p tcp --dport imap -i enp0s10 -j ACCEPT
 iptables -A FORWARD -s 23.214.219.133 -p tcp --sport imap -o enp0s10 -j ACCEPT
-iptables -A FORWARD -d 23.214.219.133 -p udp --dport imap -i enp0s10 -j ACCEPT
-iptables -A FORWARD -s 23.214.219.133 -p udp --sport imap -o enp0s10 -j ACCEPT
 
 #6. HTTP and HTTPS connections to the www server
 iptables -A FORWARD -s 192.168.10.0/24 -p tcp --dport http -d 23.214.219.130 -j ACCEPT
